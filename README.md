@@ -12,7 +12,7 @@ updated across machines instead of copy-pasted into `~/.claude/skills`.
 ## Using this repo
 
 ```bash
-claude plugin marketplace add <GitHub URL>   # or the local path
+claude plugin marketplace add https://github.com/tobias-zucali/tz-skills
 claude plugin install tz-skills
 ```
 
