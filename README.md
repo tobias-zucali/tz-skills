@@ -8,6 +8,14 @@ updated across machines instead of copy-pasted into `~/.claude/skills`.
 - **productivity/guide-me** — step-by-step guided walkthrough of a task list,
   setup process, or multi-part goal. Tracks progress in `GUIDE_ME.md` and pauses
   for confirmation after each step.
+- **meta/skill-debug** — wraps another skill's execution, logging its process
+  and any friction live to `SKILL_DEBUG_<skill-name>.md`, then compares the
+  outcome against that skill's own Definition of done (falling back to
+  prose-based judgment, explicitly flagged, if it has none) and suggests
+  concrete improvements.
+
+See `docs/SKILL_DESIGN.md` for how to write a skill in this repo, including
+the Definition of done convention that `skill-debug` relies on.
 
 ## Using this repo
 
