@@ -6,6 +6,7 @@
     {
       "name": "tz-skills",
       "source": ".",
+      "strict": false,
       "description": "Tools for my personal workflow.",
       "category": "productivity"
     }
