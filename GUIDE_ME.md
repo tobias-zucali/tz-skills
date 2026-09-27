@@ -25,13 +25,14 @@ format — not coupled to Claude-Code-only mechanisms.
       Plan amended: folded this fix into step 6 rather than adding a new step
       (see Notes for why).
 
+- [x] Step 4 — Decided `AGENTS.md` over `CLAUDE.md` (cross-agent goal makes
+      the choice deterministic) and created a minimal root `AGENTS.md`
+      pointing to README + `docs/SKILL_DESIGN.md`.
+
 ## In progress
-_(none — awaiting confirmation to start step 4)_
+_(none — awaiting confirmation to start step 5)_
 
 ## Open
-- [ ] Step 4 — Decide whether the repo needs a root agent-instructions file,
-      and if so whether `AGENTS.md` (cross-agent convention) fits better than
-      `CLAUDE.md` (Claude-specific) for this repo.
 - [ ] Step 5 — Apply the fixes found in steps 1–2 to guide-me and skill-debug.
 - [ ] Step 6 — Add a cross-agent portability guideline to
       `docs/SKILL_DESIGN.md`, and a README note that SKILL.md files are
