@@ -52,7 +52,13 @@ _(none)_
 ## Open
 _(none — all 7 steps complete)_
 
-## Status: complete
+## Status: complete, plus one follow-up
+
+Post-completion: user asked to act on the debug log's four improvement
+suggestions. All four applied to `skills/productivity/guide-me/SKILL.md` —
+see "Post-run: fixes applied" in `SKILL_DEBUG_guide-me.md` for detail.
+guide-me now has a `## Definition of done` section, so a future skill-debug
+run against it will use mode b instead of the mode-a fallback this run used.
 
 ## Notes
 - This run is being debugged live via `skills/meta/skill-debug` (run by hand,

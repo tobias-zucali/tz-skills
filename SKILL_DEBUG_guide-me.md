@@ -53,3 +53,14 @@ Mode: **a (fallback)** — guide-me has no `## Definition of done` section. Comp
 2. In step 3.2, split "update GUIDE_ME.md and the in-session task list" into two explicit sub-items rather than one "and"-joined sentence — the soft phrasing is exactly what let this run skip half of it, every step, without tripping anything.
 3. In step 2's planning guidance, add a line that each audit-style step's own fix should stay in that step by default, and pooling fixes into a shared later step needs an explicit note saying why (this run's step 3 finding folded into step 6 is a reasonable example of when that's justified).
 4. Give step 3.5 a one-line test for the ask/decide boundary, e.g.: "if the decision follows deterministically from something the user already told you, decide and state your reasoning; otherwise ask." Currently the rule just says "ask," with no guidance for calls like this run's step 4.
+
+## Post-run: fixes applied
+
+User asked to act on the four suggestions above. All four applied to guide-me/SKILL.md:
+
+1. Added a `## Definition of done` section (5 checkable items, including the task-list-mirroring item this run's own gap surfaced).
+2. Split step 3.2's "update GUIDE_ME.md and the in-session task list" into two explicit actions, with a one-line note on why it's easy to silently skip.
+3. Added a planning-pass bullet (step 2) on keeping each step's fix self-contained by default, pooling only with a stated reason.
+4. Added the ask/decide test to step 3.5 specifically (not step 2 — first attempt put it in the wrong section, since the triggering decision in this run happened during execution, not planning; caught and corrected before committing).
+
+guide-me now has what it was missing at the start of this run: with a Definition of done in place, a future `skill-debug` run against it would use mode b, not fall back to mode a.
