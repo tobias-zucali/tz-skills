@@ -27,7 +27,9 @@ format — not coupled to Claude-Code-only mechanisms.
 
 - [x] Step 4 — Decided `AGENTS.md` over `CLAUDE.md` (cross-agent goal makes
       the choice deterministic) and created a minimal root `AGENTS.md`
-      pointing to README + `docs/SKILL_DESIGN.md`.
+      pointing to README + `docs/SKILL_DESIGN.md`. Addendum: added a
+      one-line `CLAUDE.md` pointer to AGENTS.md (not a symlink — raw-content
+      fetchers don't resolve symlinks, which would defeat the purpose).
 
 ## In progress
 _(none — awaiting confirmation to start step 5)_
