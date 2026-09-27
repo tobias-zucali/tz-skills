@@ -1,7 +1,7 @@
 # tz-skills
 
-Personal Claude Code skills, packaged as a plugin so they can be installed and
-updated across machines instead of copy-pasted into `~/.claude/skills`.
+Personal agent skills, packaged as plugins so they can be installed and updated
+across machines instead of copied into each agent's skills directory.
 
 ## Skills
 
@@ -19,12 +19,41 @@ the Definition of done convention that `skill-debug` relies on, and the
 cross-agent portability rule these skills follow.
 
 Each `skills/<category>/<name>/SKILL.md` is plain markdown and works on its
-own — the `claude plugin` install flow below is a convenience for Claude
-Code specifically, not a requirement. Any AI agent that reads this skill
-format can use a `SKILL.md` file directly, e.g. by copying it into wherever
-that agent looks for skills.
+own — the plugin install flows below are conveniences, not requirements. Any
+AI agent that reads this skill format can use a `SKILL.md` file directly, e.g.
+by copying it into wherever that agent looks for skills.
 
-## Using this repo
+## Installing
+
+### ChatGPT desktop app
+
+[Official OpenAI plugin marketplace documentation](https://developers.openai.com/plugins/build/plugins)
+
+1. Open **Customize → Plugins**.
+2. Select **Add → Add plugin marketplace**.
+3. Enter the following values:
+   - **Source:** `git@github.com:tobias-zucali/tz-skills.git`
+   - **Git ref:** `main`
+   - **Sparse paths:** `plugins/codex`
+4. Select **Add marketplace**.
+5. In the **Personal** tab, find the **tz-skills** marketplace and select **+**
+   next to **tz-skills** to install it.
+
+### Claude Code
+
+[Official Anthropic plugin marketplace documentation](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)
+
+In the Claude desktop app:
+
+1. Open **Customize → Plugins → Yours**.
+2. Select **Add → Add marketplace → Add from a repository**.
+3. Enter `https://github.com/tobias-zucali/tz-skills` and select **Sync**.
+4. Under **From marketplaces you added**, open **Tz skills** and install it.
+
+To review or update the marketplace later, open
+**Customize → Plugins → Yours → Add → Manage marketplaces**.
+
+Alternatively, use the CLI:
 
 ```bash
 claude plugin marketplace add https://github.com/tobias-zucali/tz-skills
@@ -33,17 +62,12 @@ claude plugin install tz-skills
 
 To pick up changes later: `claude plugin update tz-skills`.
 
-### Using this repo with other agents
+### Other agents
 
-The `claude plugin` flow above is Claude Code's own install mechanism.
 `SKILL.md` follows the open Agent Skills format ([agentskills.io](https://agentskills.io)),
 so the skills themselves work elsewhere too — each platform just has its own
 way of loading them:
 
-- **ChatGPT** — upload a skill's folder (`skills/<category>/<name>/`,
-  containing exactly one `SKILL.md`) through Skills → Create → Upload from
-  your computer. Zip the folder first if a raw folder upload fails. Each
-  upload is one skill; there's no bulk-install for the whole repo.
 - **OpenAI Codex CLI** — copy or symlink `skills/<category>/<name>/` into
   `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
   similar to how Claude Code reads `~/.claude/skills/`.
