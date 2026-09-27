@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "tz-skills",
-      "source": "./",
+      "source": ".",
       "description": "Tools for my personal workflow.",
       "category": "productivity"
     }
