@@ -73,9 +73,20 @@ For each step, in order:
    guessing and continuing. A useful test: if the decision follows deterministically
    from something the user already told you, decide and state your reasoning instead
    of asking; if it doesn't follow from anything they've already said, ask.
+6. If a step's own outcome shows that the remaining plan no longer holds — a later
+   step turns out unnecessary, a new one is needed, the order no longer makes sense —
+   stop before continuing. Propose the revised step list with your reasoning, and wait
+   for the user to confirm before applying it; don't restructure silently just because
+   you noticed something. This is separate from #5: #5 is a decision you can't make at
+   all, this is a change you *could* just make, but shouldn't without sign-off since it
+   alters steps the user already saw and expects. Only steps still **Open** or **In
+   progress** are eligible for this kind of revision — a step already marked **Done**
+   stays as-is; if a done step turns out wrong, say so and let the user decide whether
+   to reopen it rather than rewriting history in `GUIDE_ME.md`.
 
-If the user's feedback changes scope (adds, removes, or reorders tasks), update the
-plan and `GUIDE_ME.md` accordingly before continuing.
+If the user's feedback changes scope (adds, removes, or reorders tasks), that request
+already is the confirmation — update the plan and `GUIDE_ME.md` accordingly before
+continuing, no separate approval round needed.
 
 ## 4. Track state in GUIDE_ME.md
 
@@ -123,5 +134,9 @@ file or leave it as a record.
       stopped and waited for explicit user confirmation after each one.
 - [ ] No step's work started before the user confirmed the previous one, except where
       the user's own feedback changed the plan.
+- [ ] Any mid-execution plan revision — whether from user feedback or from something
+      discovered during a step — was reflected in `GUIDE_ME.md`; revisions the agent
+      itself proposed (not requested by the user) were confirmed before being applied,
+      and no step already marked **Done** was silently rewritten.
 - [ ] At finishing: `GUIDE_ME.md` is marked complete, a summary was reported, and the
       user was asked whether to keep or remove the file.
