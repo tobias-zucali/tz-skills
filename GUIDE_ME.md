@@ -30,12 +30,14 @@ format — not coupled to Claude-Code-only mechanisms.
       pointing to README + `docs/SKILL_DESIGN.md`. Addendum: added a
       one-line `CLAUDE.md` pointer to AGENTS.md (not a symlink — raw-content
       fetchers don't resolve symlinks, which would defeat the purpose).
+- [x] Step 5 — Rewrote guide-me lines 42/46/62/93 to name the action
+      generically with the Claude Code tool as the preferred (not sole)
+      path. skill-debug needed no changes.
 
 ## In progress
-_(none — awaiting confirmation to start step 5)_
+_(none — awaiting confirmation to start step 6)_
 
 ## Open
-- [ ] Step 5 — Apply the fixes found in steps 1–2 to guide-me and skill-debug.
 - [ ] Step 6 — Add a cross-agent portability guideline to
       `docs/SKILL_DESIGN.md`, and a README note that SKILL.md files are
       usable independent of the `.claude-plugin/` packaging (folded in from

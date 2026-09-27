@@ -39,11 +39,13 @@ it with the user. This is a real planning pass, not a rubber stamp:
   something checkable (a command ran, a file exists, a question got answered), not a
   fixed count of sub-tasks or a time box. Don't over-split into tiny steps; don't
   bundle unrelated outcomes into one step either.
-- Where the ordering, scope, or intent is ambiguous, use `AskUserQuestion` to resolve
-  it before finalizing the plan — don't guess silently on decisions that are the
-  user's to make.
-- Once the step list is settled, write it to `GUIDE_ME.md` (see format below) and
-  mirror it into the session's task list (TodoWrite/Tasks) for live tracking.
+- Where the ordering, scope, or intent is ambiguous, ask the user directly to resolve
+  it before finalizing the plan — use a structured-choice tool (e.g. `AskUserQuestion`)
+  if the agent has one, otherwise ask in plain text. Don't guess silently on decisions
+  that are the user's to make.
+- Once the step list is settled, write it to `GUIDE_ME.md` (see format below), and
+  also mirror it into the agent's own task-tracking tool (e.g. TodoWrite/Tasks) if it
+  has one, for live tracking alongside it.
 - Show the user the finalized step list before starting step 1.
 
 ## 3. Execute one step at a time
@@ -59,7 +61,8 @@ For each step, in order:
    the plan. This holds even under a general "keep going without asking" mode — the
    entire point of this skill is that the user sets the pace.
 5. If, during a step, you hit a decision only the user can make (not a fact you can
-   look up yourself), pause immediately and ask via `AskUserQuestion` rather than
+   look up yourself), pause immediately and ask the user directly — with a
+   structured-choice tool (e.g. `AskUserQuestion`) if the agent has one — rather than
    guessing and continuing.
 
 If the user's feedback changes scope (adds, removes, or reorders tasks), update the
@@ -90,9 +93,10 @@ Started: <date>
 - <decisions made, things to remember, blockers resolved>
 ```
 
-This file is what makes the guide resumable: if the session ends, a later `/guide-me`
-invocation in the same directory should read it and pick up exactly where things left
-off.
+This file is what makes the guide resumable: if the session ends, a later invocation
+of this skill in the same directory — a `/guide-me` slash command or whatever else
+matches the trigger phrasing in this skill's description — should read it and pick up
+exactly where things left off.
 
 ## 5. Finishing
 
