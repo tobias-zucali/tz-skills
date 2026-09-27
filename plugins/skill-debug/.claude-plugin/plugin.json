@@ -1,8 +1,0 @@
-{
-  "name": "skill-debug",
-  "version": "1.0.0",
-  "description": "Wrap another skill's execution to trace its process, log friction, and evaluate it against its own definition of done.",
-  "skills": [
-    "./skills/skill-debug"
-  ]
-}

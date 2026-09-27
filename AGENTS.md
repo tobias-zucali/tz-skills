@@ -1,12 +1,10 @@
 # Agent instructions for tz-skills
 
-This repo is a collection of skills, each packaged as its own Claude Code
-plugin (`plugins/<name>/`, with `plugins/<name>/skills/<name>/SKILL.md`) and
-listed in one marketplace (`.claude-plugin/marketplace.json`). Every
-`.claude-plugin/` directory is the only part of this repo allowed to assume
-Claude Code specifically — the skill content itself (each `SKILL.md`) is
-meant to be usable by any AI agent that reads this format, independent of
-that packaging.
+This repo is a collection of skills (`skills/<name>/SKILL.md`),
+packaged as a Claude Code plugin. The `.claude-plugin/` directory is the only
+part of this repo allowed to assume Claude Code specifically — the skill
+content itself (each `SKILL.md`) is meant to be usable by any AI agent that
+reads this format, independent of that packaging.
 
 - To add or change a skill, follow "Adding a new skill" in `README.md`.
 - Before writing or editing any `SKILL.md`, read `docs/SKILL_DESIGN.md` —
@@ -14,7 +12,7 @@ that packaging.
   cross-agent portability rule.
 - There is no build step, package manifest, or test suite beyond the skills
   themselves — this is a markdown-only repo. To validate a skill, run
-  `plugins/skill-debug` against it rather than looking for a test
+  `skills/skill-debug` against it rather than looking for a test
   command.
 - Keep `SKILL.md` bodies agent-neutral: don't name a specific tool by its
   exact Claude Code name as the only way to do something. Describe the

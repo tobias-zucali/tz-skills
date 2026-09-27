@@ -4,16 +4,10 @@
   "description": "Personal Claude Code skills.",
   "plugins": [
     {
-      "name": "guide-me",
-      "source": { "source": "git-subdir", "url": "tobias-zucali/tz-skills", "path": "plugins/guide-me" },
-      "description": "Step-by-step guided walkthrough of a task list, setup process, or multi-part goal.",
+      "name": "tz-skills",
+      "source": { "source": "github", "repo": "tobias-zucali/tz-skills" },
+      "description": "Tools for my personal workflow.",
       "category": "productivity"
-    },
-    {
-      "name": "skill-debug",
-      "source": { "source": "git-subdir", "url": "tobias-zucali/tz-skills", "path": "plugins/skill-debug" },
-      "description": "Wrap another skill's execution to trace its process, log friction, and evaluate it against its own definition of done.",
-      "category": "development"
     }
   ]
 }

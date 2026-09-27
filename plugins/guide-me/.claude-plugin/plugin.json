@@ -1,8 +1,0 @@
-{
-  "name": "guide-me",
-  "version": "1.0.0",
-  "description": "Step-by-step guided walkthrough of a task list, setup process, or multi-part goal.",
-  "skills": [
-    "./skills/guide-me"
-  ]
-}
