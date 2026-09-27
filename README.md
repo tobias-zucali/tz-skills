@@ -1,7 +1,9 @@
 # tz-skills
 
 Personal agent skills, packaged as plugins so they can be installed and updated
-across machines instead of copied into each agent's skills directory.
+across machines instead of copied into each agent's skills directory. Each
+skill is its own plugin under `plugins/<name>/`, listed in one marketplace
+(`.claude-plugin/marketplace.json`) so they can be installed individually.
 
 ## Skills
 
@@ -18,10 +20,10 @@ See `docs/SKILL_DESIGN.md` for how to write a skill in this repo, including
 the Definition of done convention that `skill-debug` relies on, and the
 cross-agent portability rule these skills follow.
 
-Each `skills/<name>/SKILL.md` is plain markdown and works on its
-own — the plugin install flows below are conveniences, not requirements. Any
-AI agent that reads this skill format can use a `SKILL.md` file directly, e.g.
-by copying it into wherever that agent looks for skills.
+Each `plugins/<name>/skills/<name>/SKILL.md` is plain markdown and works on
+its own — the plugin install flows below are conveniences, not requirements.
+Any AI agent that reads this skill format can use a `SKILL.md` file directly,
+e.g. by copying it into wherever that agent looks for skills.
 
 ## Installing
 
@@ -48,7 +50,8 @@ In the Claude desktop app:
 1. Open **Customize → Plugins → Yours**.
 2. Select **Add → Add marketplace → Add from a repository**.
 3. Enter `https://github.com/tobias-zucali/tz-skills` and select **Sync**.
-4. Under **From marketplaces you added**, open **Tz skills** and install it.
+4. Under **From marketplaces you added**, open **Tz skills** and install
+   whichever plugins you want — each skill installs independently.
 
 To review or update the marketplace later, open
 **Customize → Plugins → Yours → Add → Manage marketplaces**.
@@ -57,10 +60,11 @@ Alternatively, use the CLI:
 
 ```bash
 claude plugin marketplace add https://github.com/tobias-zucali/tz-skills
-claude plugin install tz-skills
+claude plugin install guide-me@tz-skills
+claude plugin install skill-debug@tz-skills
 ```
 
-To pick up changes later: `claude plugin update tz-skills`.
+To pick up changes later: `claude plugin update <plugin-name>@tz-skills`.
 
 ### Other agents
 
@@ -68,13 +72,16 @@ To pick up changes later: `claude plugin update tz-skills`.
 so the skills themselves work elsewhere too — each platform just has its own
 way of loading them:
 
-- **OpenAI Codex CLI** — copy or symlink `skills/<name>/` into
+- **OpenAI Codex CLI** — copy or symlink `plugins/<name>/skills/<name>/` into
   `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
   similar to how Claude Code reads `~/.claude/skills/`.
 
 ## Adding a new skill
 
-1. Create `skills/<name>/SKILL.md`.
-2. Add `"./skills/<name>"` to `.claude-plugin/plugin.json`'s `skills` array.
-3. Bump `version` in `plugin.json`.
-4. Commit and push (and run `claude plugin update tz-skills` locally to pick it up).
+1. Create `plugins/<name>/.claude-plugin/plugin.json` (`name`, `version`,
+   `description`, `skills: ["./skills/<name>"]`) and
+   `plugins/<name>/skills/<name>/SKILL.md`.
+2. Add an entry for it to `.claude-plugin/marketplace.json`'s `plugins` array,
+   with `source: { "source": "git-subdir", "url": "tobias-zucali/tz-skills", "path": "plugins/<name>" }`.
+3. Commit and push (and run `claude plugin marketplace update tz-skills`
+   locally to pick it up).
