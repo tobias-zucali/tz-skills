@@ -8,15 +8,15 @@ the repo generally) usable by any AI agent that supports the plugin/skill
 format — not coupled to Claude-Code-only mechanisms.
 
 ## Done
-_(none yet)_
+- [x] Step 1 — Audited both SKILL.md instruction bodies. Findings: guide-me
+      names `AskUserQuestion` (lines 42, 62) and `TodoWrite/Tasks` (line 46)
+      directly, and assumes `/guide-me` slash-command syntax (line 93);
+      skill-debug has no Claude-Code-only tool names in its body.
 
 ## In progress
-_(none — plan just drafted, awaiting confirmation to start step 1)_
+_(none — awaiting confirmation to start step 2)_
 
 ## Open
-- [ ] Step 1 — Audit both SKILL.md instruction bodies (guide-me, skill-debug)
-      for references to Claude-Code-only tool/mechanism names that another
-      agent might not have, and list what's found.
 - [ ] Step 2 — Audit SKILL.md frontmatter and trigger descriptions for
       portability: minimal universal fields, natural-language triggers that
       don't depend solely on a `/slash-command`.
