@@ -33,15 +33,15 @@ format — not coupled to Claude-Code-only mechanisms.
 - [x] Step 5 — Rewrote guide-me lines 42/46/62/93 to name the action
       generically with the Claude Code tool as the preferred (not sole)
       path. skill-debug needed no changes.
+- [x] Step 6 — Added "Cross-agent portability" section to
+      `docs/SKILL_DESIGN.md` (generic-action-with-preferred-tool pattern,
+      frontmatter/description rules) and a README note that SKILL.md files
+      work independent of the `.claude-plugin/` install flow.
 
 ## In progress
-_(none — awaiting confirmation to start step 6)_
+_(none — awaiting confirmation to start step 7)_
 
 ## Open
-- [ ] Step 6 — Add a cross-agent portability guideline to
-      `docs/SKILL_DESIGN.md`, and a README note that SKILL.md files are
-      usable independent of the `.claude-plugin/` packaging (folded in from
-      step 3's finding).
 - [ ] Step 7 — Re-verify both SKILL.md files after edits and record final
       findings.
 

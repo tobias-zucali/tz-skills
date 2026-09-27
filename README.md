@@ -15,7 +15,14 @@ updated across machines instead of copy-pasted into `~/.claude/skills`.
   concrete improvements.
 
 See `docs/SKILL_DESIGN.md` for how to write a skill in this repo, including
-the Definition of done convention that `skill-debug` relies on.
+the Definition of done convention that `skill-debug` relies on, and the
+cross-agent portability rule these skills follow.
+
+Each `skills/<category>/<name>/SKILL.md` is plain markdown and works on its
+own — the `claude plugin` install flow below is a convenience for Claude
+Code specifically, not a requirement. Any AI agent that reads this skill
+format can use a `SKILL.md` file directly, e.g. by copying it into wherever
+that agent looks for skills.
 
 ## Using this repo
 

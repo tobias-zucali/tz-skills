@@ -1,7 +1,7 @@
 # Skill design guidelines
 
-How to write a skill for this repo so it's easy for Claude to follow correctly
-and easy to evaluate afterward.
+How to write a skill for this repo so it's easy for an AI agent to follow
+correctly and easy to evaluate afterward.
 
 ## Anatomy of a skill
 
@@ -55,6 +55,36 @@ rather than silently guessing — this is a real gap worth closing.
 - **Don't over-specify.** Match step granularity to verifiable outcomes, not
   a fixed count of sub-tasks or a time box — see `guide-me`'s own guidance on
   this for an example.
+
+## Cross-agent portability
+
+This repo is packaged as a Claude Code plugin, but a `SKILL.md`'s content is
+plain markdown — any AI agent that reads this format can follow it directly,
+not just Claude Code. The `.claude-plugin/` directory (the plugin manifest,
+the marketplace listing, `claude plugin install`/`update` commands) is the
+**only** part of this repo allowed to assume Claude Code specifically. Skill
+bodies should stay usable if someone lifts a single `skills/<name>/SKILL.md`
+file out of this repo and hands it to a different agent.
+
+In practice:
+
+- Don't name a specific tool by its exact Claude Code name as the *only* way
+  to do something (e.g. "use `AskUserQuestion`"). Describe the action
+  generically ("ask the user directly"), then name the matching tool as the
+  preferred path when the running agent has one: "ask the user directly —
+  with a structured-choice tool (e.g. `AskUserQuestion`) if the agent has
+  one." The skill still reads as a strong, specific recommendation on
+  Claude Code; it just doesn't silently fail on an agent without that exact
+  tool.
+- Don't make a skill's own resumability or state-tracking depend on a
+  `/slash-command` existing. Describe invocation as "however the agent
+  invokes this skill (a slash command, or matching the trigger phrasing in
+  the description)" rather than hard-coding the slash form.
+- Frontmatter should stick to the minimal `name`/`description` fields; avoid
+  fields that only one agent's loader understands.
+- A skill's description should lead with natural-language trigger phrases
+  and situations, and list any `/slash-command` as one route among others —
+  never the only one a reader can infer.
 
 ## Debugging a skill
 
