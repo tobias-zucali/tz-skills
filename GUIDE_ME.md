@@ -18,19 +18,25 @@ format — not coupled to Claude-Code-only mechanisms.
       before the supplementary `/slash-command`, `name` matches directory
       slug. No fixes needed — clean.
 
+- [x] Step 3 — Audited the packaging layer. Structural separation is already
+      reasonable (`.claude-plugin/` isolates Claude-Code-specific manifests;
+      SKILL.md bodies stay unbranded per step 1). Gap: README never states
+      SKILL.md files are usable independent of the `.claude-plugin/` wrapper.
+      Plan amended: folded this fix into step 6 rather than adding a new step
+      (see Notes for why).
+
 ## In progress
-_(none — awaiting confirmation to start step 3)_
+_(none — awaiting confirmation to start step 4)_
 
 ## Open
-- [ ] Step 3 — Audit the packaging layer (`.claude-plugin/plugin.json`,
-      `marketplace.json`, README install instructions) for clear separation
-      between Claude-Code-specific packaging and agent-neutral skill content.
 - [ ] Step 4 — Decide whether the repo needs a root agent-instructions file,
       and if so whether `AGENTS.md` (cross-agent convention) fits better than
       `CLAUDE.md` (Claude-specific) for this repo.
 - [ ] Step 5 — Apply the fixes found in steps 1–2 to guide-me and skill-debug.
 - [ ] Step 6 — Add a cross-agent portability guideline to
-      `docs/SKILL_DESIGN.md` so future skills follow the same rule.
+      `docs/SKILL_DESIGN.md`, and a README note that SKILL.md files are
+      usable independent of the `.claude-plugin/` packaging (folded in from
+      step 3's finding).
 - [ ] Step 7 — Re-verify both SKILL.md files after edits and record final
       findings.
 
@@ -43,3 +49,8 @@ _(none — awaiting confirmation to start step 3)_
   "ask the user directly") while still recommending a matching tool (e.g. a
   structured-choice tool) when the running agent has one — not strip
   Claude-specific tool usage outright.
+- Plan gap found during step 3 (logged as friction in the debug log): the
+  upfront plan sized step 5 as the one fix step for steps 1-2's finding type
+  and didn't allocate for step 3's different finding type (a documentation
+  gap, not a tool-reference rewrite). Folded into step 6 rather than adding
+  a step.
