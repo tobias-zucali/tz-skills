@@ -88,7 +88,7 @@ In practice:
 
 ## Debugging a skill
 
-`skills/meta/skill-debug` wraps another skill's execution: it traces the
+`skills/skill-debug` wraps another skill's execution: it traces the
 process live to a log file, flags friction as it happens, and at the end
 compares the outcome against the target skill's Definition of done (falling
 back to prose-based judgment, explicitly flagged, if the section doesn't
