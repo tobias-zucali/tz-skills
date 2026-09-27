@@ -19,3 +19,37 @@ Comparison mode: a (fallback) — no `## Definition of done` section found in gu
 - [3, plan-step 5: Apply fixes] Rewrote guide-me lines 42/46/62/93: each now names the action generically ("ask the user directly", "the agent's own task-tracking tool") and lists the Claude Code tool as the preferred path when the running agent has one, rather than the sole mechanism. skill-debug needed no changes (step 1 found it already agent-neutral).
 - [3, plan-step 6: Add portability guidance] Added a "Cross-agent portability" section to docs/SKILL_DESIGN.md codifying the generic-action-with-preferred-tool pattern applied in step 5, plus the frontmatter/description rules already confirmed clean in step 2. Added a README note (folded in from step 3's finding) stating SKILL.md files work independent of the `.claude-plugin/` install flow.
 - [note, step 6 addendum] User asked what's needed for ChatGPT compatibility specifically. Researched via WebSearch/WebFetch (openai.com and agentskills.io themselves were egress-blocked; used third-party coverage and OpenAI Help Center/Learn pages instead): SKILL.md is now an open standard (agentskills.io, opened by Anthropic late 2025) already adopted by ChatGPT, OpenAI Codex CLI, Cursor, GitHub Copilot — same frontmatter/body format this repo already uses, so no content changes were needed beyond step 5's fixes. Added a "Using this repo with other agents" section to README with ChatGPT's upload-based install and Codex CLI's `.agents/skills/` folder convention.
+- [3, plan-step 7: Re-verify] Re-read guide-me/SKILL.md in full post-edit. No Claude-only tool names remain as a sole mechanism; no "Claude Code" branding anywhere; still no Definition of done section (intentional, per design). Reviewing the whole run's transcript against guide-me's own stated process for the comparison below surfaced one gap not caught in earlier steps.
+- [3, plan-step 7] FRICTION: guide-me's step 2 says to "mirror [the plan] into the agent's own task-tracking tool... for live tracking," and step 3.2 says to "update GUIDE_ME.md and the in-session task list" after every step. Across all 7 steps of this run, only GUIDE_ME.md was ever updated — the in-session task list (TaskCreate/TaskUpdate, available this session) was never touched, despite the harness surfacing reminders about it at multiple points during the run. This went unnoticed until this re-verification pass, because nothing in the skill's own process checks for it.
+
+## Comparison
+
+Mode: **a (fallback)** — guide-me has no `## Definition of done` section. Comparison is judgment-based against its stated purpose and process; that absence is itself a finding (see Analysis).
+
+| Stated behavior (guide-me prose) | Outcome this run |
+| --- | --- |
+| Step 0: detect existing guide before doing anything else | Met — checked, none found, proceeded correctly. |
+| Step 1: gather input, ask only if genuinely vague | Met — goal was concrete, no unnecessary question asked. |
+| Step 2: real planning pass, show finalized plan before executing | Met — 7-step plan grouped by verifiable outcome, shown and confirmed before any execution. |
+| Step 2/3.2: mirror plan into GUIDE_ME.md *and* the in-session task list | **Partially met** — GUIDE_ME.md updated every step; in-session task list never touched. |
+| Step 3.1/3.4: do one step's work only, stop and wait for explicit confirmation | Met — held across all 7 steps and every addendum; correctly did not treat an ambiguous "Hi" as confirmation to proceed. |
+| Step 3.5: ask when hitting a decision only the user can make | **Ambiguous** — held for genuinely open questions (symlink vs. pointer file, plan changes), but the AGENTS.md-vs-CLAUDE.md call in step 4 was decided directly rather than asked, on the reasoning that it followed deterministically from a constraint the user had already stated. Outcome was fine (user didn't object), but the skill gives no test for telling a "downstream-determined" call apart from a genuinely open one. |
+| Step 4: keep GUIDE_ME.md as durable, resumable state | Met — format matches the suggested template closely. |
+| Step 5: finishing — mark complete, summarize, ask about the file | In progress as of this entry — see below. |
+
+## Analysis
+
+**How well the goal was reached:** The underlying audit goal — improving this repo's cross-agent portability — was fully achieved: four concrete, shipped changes (agent-neutral tool references in guide-me, `AGENTS.md`/`CLAUDE.md`, a portability section in `docs/SKILL_DESIGN.md`, and README guidance for ChatGPT/Codex CLI). guide-me's own process discipline held up well on everything a human directly observes — the plan, the stop-and-wait cadence, GUIDE_ME.md itself — but failed silently on the one part nobody would notice without a debug log: task-list mirroring never happened, for 7 steps straight.
+
+**What went wrong, grouped by root cause:**
+
+1. **Task-list mirroring gap.** guide-me phrases it as a soft parallel action ("and mirror it into... the in-session task list") rather than a separately-checkable requirement, and nothing later in the skill verifies it happened. Nothing forced it to be noticed until this explicit re-verification pass.
+2. **Plan/fix-step mismatch (already logged mid-run).** The 7-step plan paired two different finding types — tool-reference rewrites and a documentation gap — with a single fix step (step 5) sized for only one of them, forcing an on-the-fly amendment at step 3. guide-me's planning guidance says nothing about keeping each audit step's fix self-contained versus deliberately deferring it.
+3. **No test for "ask vs. decide."** Step 3.5 says to ask when a decision is "only the user's to make," but gives no way to tell a decision that's downstream-determined by something the user already stated (this run's AGENTS.md-vs-CLAUDE.md call) from a genuinely open one. This run got lucky; the rule as written doesn't guarantee it.
+
+**Concrete suggestions for guide-me's SKILL.md:**
+
+1. Add a `## Definition of done` section, including an item like "the in-session task list reflects the current step list and state" — this makes the mirroring requirement checkable instead of a narrated aside, and closes the mode-a gap this run's comparison had to fall back on.
+2. In step 3.2, split "update GUIDE_ME.md and the in-session task list" into two explicit sub-items rather than one "and"-joined sentence — the soft phrasing is exactly what let this run skip half of it, every step, without tripping anything.
+3. In step 2's planning guidance, add a line that each audit-style step's own fix should stay in that step by default, and pooling fixes into a shared later step needs an explicit note saying why (this run's step 3 finding folded into step 6 is a reasonable example of when that's justified).
+4. Give step 3.5 a one-line test for the ask/decide boundary, e.g.: "if the decision follows deterministically from something the user already told you, decide and state your reasoning; otherwise ask." Currently the rule just says "ask," with no guidance for calls like this run's step 4.

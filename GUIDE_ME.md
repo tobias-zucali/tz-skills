@@ -40,13 +40,19 @@ format — not coupled to Claude-Code-only mechanisms.
       researched ChatGPT compatibility (SKILL.md is now the open
       agentskills.io standard, already adopted by ChatGPT/Codex CLI/Cursor/
       Copilot) and added a README section with per-agent install steps.
+- [x] Step 7 — Re-verified both SKILL.md files (clean). Wrote the final
+      Comparison and Analysis to `SKILL_DEBUG_guide-me.md`. Found one real
+      compliance gap in this very run: the in-session task list was never
+      mirrored, despite guide-me instructing it every step — logged as the
+      top improvement suggestion.
 
 ## In progress
-_(none — awaiting confirmation to start step 7)_
+_(none)_
 
 ## Open
-- [ ] Step 7 — Re-verify both SKILL.md files after edits and record final
-      findings.
+_(none — all 7 steps complete)_
+
+## Status: complete
 
 ## Notes
 - This run is being debugged live via `skills/meta/skill-debug` (run by hand,
