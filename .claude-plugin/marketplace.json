@@ -5,8 +5,7 @@
   "plugins": [
     {
       "name": "tz-skills",
-      "source": ".",
-      "strict": false,
+      "source": { "source": "github", "repo": "tobias-zucali/tz-skills" },
       "description": "Tools for my personal workflow.",
       "category": "productivity"
     }
