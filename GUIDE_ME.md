@@ -13,13 +13,15 @@ format — not coupled to Claude-Code-only mechanisms.
       directly, and assumes `/guide-me` slash-command syntax (line 93);
       skill-debug has no Claude-Code-only tool names in its body.
 
+- [x] Step 2 — Audited frontmatter and trigger descriptions. Both skills:
+      minimal name/description fields, natural-language triggers listed
+      before the supplementary `/slash-command`, `name` matches directory
+      slug. No fixes needed — clean.
+
 ## In progress
-_(none — awaiting confirmation to start step 2)_
+_(none — awaiting confirmation to start step 3)_
 
 ## Open
-- [ ] Step 2 — Audit SKILL.md frontmatter and trigger descriptions for
-      portability: minimal universal fields, natural-language triggers that
-      don't depend solely on a `/slash-command`.
 - [ ] Step 3 — Audit the packaging layer (`.claude-plugin/plugin.json`,
       `marketplace.json`, README install instructions) for clear separation
       between Claude-Code-specific packaging and agent-neutral skill content.
@@ -37,3 +39,7 @@ _(none — awaiting confirmation to start step 2)_
   not through the Skill tool — see `SKILL_DEBUG_guide-me.md`).
 - Comparison mode is (a), fallback: guide-me has no Definition of done
   section. That absence is itself logged as a finding.
+- User guidance for step 5: fixes should phrase actions generically (e.g.
+  "ask the user directly") while still recommending a matching tool (e.g. a
+  structured-choice tool) when the running agent has one — not strip
+  Claude-specific tool usage outright.
