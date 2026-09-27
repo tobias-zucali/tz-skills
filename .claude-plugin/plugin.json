@@ -1,0 +1,8 @@
+{
+  "name": "tz-skills",
+  "version": "1.0.0",
+  "description": "Personal Claude Code skills.",
+  "skills": [
+    "./skills/productivity/guide-me"
+  ]
+}

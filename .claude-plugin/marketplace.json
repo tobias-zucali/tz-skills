@@ -1,0 +1,13 @@
+{
+  "name": "tz-skills",
+  "owner": { "name": "Tobias" },
+  "description": "Personal Claude Code skills.",
+  "plugins": [
+    {
+      "name": "tz-skills",
+      "source": "./",
+      "description": "Tools for my personal workflow.",
+      "category": "productivity"
+    }
+  ]
+}
