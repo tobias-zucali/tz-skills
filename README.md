@@ -33,6 +33,21 @@ claude plugin install tz-skills
 
 To pick up changes later: `claude plugin update tz-skills`.
 
+### Using this repo with other agents
+
+The `claude plugin` flow above is Claude Code's own install mechanism.
+`SKILL.md` follows the open Agent Skills format ([agentskills.io](https://agentskills.io)),
+so the skills themselves work elsewhere too — each platform just has its own
+way of loading them:
+
+- **ChatGPT** — upload a skill's folder (`skills/<category>/<name>/`,
+  containing exactly one `SKILL.md`) through Skills → Create → Upload from
+  your computer. Zip the folder first if a raw folder upload fails. Each
+  upload is one skill; there's no bulk-install for the whole repo.
+- **OpenAI Codex CLI** — copy or symlink `skills/<category>/<name>/` into
+  `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
+  similar to how Claude Code reads `~/.claude/skills/`.
+
 ## Adding a new skill
 
 1. Create `skills/<category>/<name>/SKILL.md`.

@@ -36,7 +36,10 @@ format — not coupled to Claude-Code-only mechanisms.
 - [x] Step 6 — Added "Cross-agent portability" section to
       `docs/SKILL_DESIGN.md` (generic-action-with-preferred-tool pattern,
       frontmatter/description rules) and a README note that SKILL.md files
-      work independent of the `.claude-plugin/` install flow.
+      work independent of the `.claude-plugin/` install flow. Addendum:
+      researched ChatGPT compatibility (SKILL.md is now the open
+      agentskills.io standard, already adopted by ChatGPT/Codex CLI/Cursor/
+      Copilot) and added a README section with per-agent install steps.
 
 ## In progress
 _(none — awaiting confirmation to start step 7)_
