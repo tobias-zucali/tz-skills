@@ -72,9 +72,44 @@ way of loading them:
   `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
   similar to how Claude Code reads `~/.claude/skills/`.
 
+## Release conventions
+
+This repository follows [Semantic Versioning](https://semver.org/). The
+canonical plugin version is the `version` field in
+`.claude-plugin/plugin.json`; do not duplicate it in
+`.claude-plugin/marketplace.json` or the individual skills.
+
+Choose the version bump according to the user-visible plugin change:
+
+- **Patch** (`x.y.Z`) for backward-compatible fixes, clarifications, and
+  refinements to an existing skill's behavior.
+- **Minor** (`x.Y.0`) for a new skill or a substantial backward-compatible
+  capability added to an existing skill.
+- **Major** (`X.0.0`) for breaking changes such as removing or renaming a skill,
+  changing its purpose incompatibly, or requiring users to adapt an established
+  workflow.
+
+Documentation or repository-maintenance changes that do not alter the packaged
+skills do not require a version bump. When a release contains several changes,
+use the highest bump required by any of them. Make the version bump in the same
+commit as the change it releases; avoid version-only follow-up commits.
+
+Before committing a release:
+
+1. Follow the validation requirements in `AGENTS.md` for every changed skill.
+2. Check the plugin manifest is valid JSON and run `git diff --check`.
+3. Review the complete staged diff and commit the skill, documentation, and
+   version bump together.
+4. Push the commit, then update the installed plugin locally to exercise the
+   released version (`claude plugin update tz-skills` for Claude Code).
+
+This repository does not require a Git tag or a separate changelog for each
+release. The versioned commit and its message are the release record.
+
 ## Adding a new skill
 
 1. Create `skills/<name>/SKILL.md`.
 2. Add `"./skills/<name>"` to `.claude-plugin/plugin.json`'s `skills` array.
-3. Bump `version` in `plugin.json`.
-4. Commit and push (and run `claude plugin update tz-skills` locally to pick it up).
+3. Validate the skill according to `AGENTS.md`.
+4. Apply the minor version bump required by the release conventions above.
+5. Commit and push, then update the installed plugin locally.
