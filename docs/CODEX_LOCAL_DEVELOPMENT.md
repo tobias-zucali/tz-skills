@@ -55,18 +55,30 @@ unlink "$HOME/.agents/skills/guide-me"
 unlink "$HOME/.agents/skills/skill-debug"
 ```
 
-## Optional local plugin registration
+## Optional marketplace registration
 
-The direct skill links are sufficient for live skill development. To also show
-the complete plugin in Codex plugin administration, register this repository's
-`.agents/plugins/marketplace.json` and install the plugin:
+The direct skill links are sufficient for live skill development. To make the
+plugin available in Codex plugin administration, register this repository's
+`.agents/plugins/marketplace.json` as a local marketplace:
 
 ```bash
 codex plugin marketplace add /absolute/path/to/tz-skills
+```
+
+Do not install `tz-skills@tz-skills` while the direct skill links are active.
+Otherwise Codex discovers every skill twice: once through the installed plugin
+and once through `$HOME/.agents/skills/`.
+
+To switch from live development to testing the packaged plugin, first remove
+the direct links and then install it:
+
+```bash
+unlink "$HOME/.agents/skills/guide-me"
+unlink "$HOME/.agents/skills/skill-debug"
 codex plugin add tz-skills@tz-skills
 ```
 
-Codex copies installed plugin content into its cache. Leave that cache intact;
-the links in `$HOME/.agents/skills/` provide the live development path. The
-repository's `.claude-plugin/` directory is the Claude Code plugin manifest,
-while `.agents/plugins/marketplace.json` describes the local Codex marketplace.
+Codex copies installed plugin content into its cache. Leave that cache intact.
+The repository's `.claude-plugin/` directory is the Claude Code plugin
+manifest, while `.agents/plugins/marketplace.json` describes the local Codex
+marketplace.
