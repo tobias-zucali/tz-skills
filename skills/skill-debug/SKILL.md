@@ -47,6 +47,16 @@ otherwise append a run without altering earlier content. Begin each run with
 and comparison mode. Following content belongs to that run until the next
 `## Run` heading.
 
+**Keep it out of version control by default.** This file is a debugging trace,
+not a repo artifact — easy to sweep into an unrelated commit via
+`git add -A`/`git commit -a` without anyone meaning to track it. Before
+creating `SKILL_DEBUG_<skill-name>.md` for the first time in a directory under
+git version control, check whether it's already ignored; if not, exclude it
+locally (append it to `.git/info/exclude` — a local, uncommitted ignore list,
+not the tracked `.gitignore`) rather than leave it exposed. Skip this if it's
+already ignored, the directory isn't under version control, or the user has
+said they want this particular file tracked.
+
 ## 2. Run the target skill, logging live
 
 Follow the target skill's own instructions to actually do its job. At each
@@ -123,11 +133,29 @@ scoped to the current run and its target definition.
 Report a short summary to the user — not the full log — and point them to the
 log file for detail.
 
+## 6. Finishing
+
+Once the user has decided what to do with this run's suggestions (applied,
+deferred, or declined), check whether `SKILL_DEBUG_<skill-name>.md` still
+holds anything not already captured elsewhere — an applied suggestion belongs
+in the target `SKILL.md` itself, not just the log; a deferred one might
+belong in an issue or note the user maintains. Ask explicitly rather than
+assume nothing's left behind.
+
+Once nothing of value is orphaned in it, remove the file by default — it was
+scratch state for reaching the suggestions, not a record worth keeping for its
+own sake. Keep it only if the user actually wants future runs compared
+against this one (the log's cross-run analysis in step 5 depends on prior
+runs still being there), or otherwise explicitly asks to keep it.
+
 ## Definition of done
 
 - [ ] `SKILL_DEBUG_<skill-name>.md` contains a distinct current-run section
       with start timestamp, target name and path, and comparison mode; earlier
       runs remain unchanged.
+- [ ] In a git-versioned directory, `SKILL_DEBUG_<skill-name>.md` is excluded
+      from accidental commits (already ignored, newly excluded, or the user
+      explicitly chose to track it).
 - [ ] The current run contains at least one trace entry per checkpoint the
       target skill actually passed through, written incrementally (not
       reconstructed only at the end).
@@ -141,3 +169,5 @@ log file for detail.
 - [ ] A run that stopped before target completion is marked incomplete with
       its stopping point recorded.
 - [ ] The user received a short summary, not the full log inline.
+- [ ] At finishing: the log was checked for anything not yet captured
+      elsewhere, and the file was removed unless the user chose to keep it.
