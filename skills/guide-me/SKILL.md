@@ -82,6 +82,12 @@ For each step, in order:
    confirms (e.g. "next", "continue", "looks good") or gives feedback that changes
    the plan. This holds even under a general "keep going without asking" mode — the
    entire point of this skill is that the user sets the pace.
+   A confirmation such as "done", "erledigt", or "looks good" both closes the
+   current step and normally authorizes starting the next open step in the agreed
+   order. Do not ask for separate permission merely to proceed. Ask again when the
+   next step requires distinct authorization because it is sensitive, destructive,
+   externally consequential, or outside the previously agreed scope, or when the
+   remaining plan must be revised.
 5. If, during a step, you hit a decision only the user can make (not a fact you can
    look up yourself), pause immediately and ask the user directly — with a
    structured-choice tool (e.g. `AskUserQuestion`) if the agent has one — rather than
@@ -180,8 +186,10 @@ them decide, since the default above keeps it locally excluded.
       track it).
 - [ ] The in-session task list (if the agent has one) reflects the current step list
       and state — checked separately from `GUIDE_ME.md`, not assumed to follow from it.
-- [ ] Every step was reported with its concrete result before moving on, and the guide
-      stopped and waited for explicit user confirmation after each one.
+- [ ] Every step was reported with its concrete result before moving on. The guide
+      waited for explicit user confirmation where required; that confirmation also
+      authorized starting the next agreed open step without a redundant permission
+      question, unless that step required distinct authorization.
 - [ ] No step's work started before the user confirmed the previous one, except where
       the user's own feedback changed the plan.
 - [ ] Any mid-execution plan revision — whether from user feedback or from something
