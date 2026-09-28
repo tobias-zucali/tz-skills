@@ -1,6 +1,6 @@
 ---
 name: skill-debug
-description: Wrap another skill's execution to trace the process it goes through, log friction as it happens, and at the end compare the outcome against that skill's own definition of success before suggesting improvements. Use when the user asks to debug, trace, instrument, or evaluate a skill (e.g. "debug guide-me", "trace how the X skill goes", "evaluate skill Y"), or invokes /skill-debug <skill-name>.
+description: Wrap another skill's execution to trace the process it goes through, log friction as it happens, and at the end compare the outcome against that skill's own definition of success before suggesting improvements. Use when the user asks to debug, trace, instrument, or evaluate a skill (e.g. "debug guide-me", "trace how the X skill goes", "evaluate skill Y"), or invokes /skill-debug SKILL_NAME.
 ---
 
 Run a target skill exactly as it would normally run, while also keeping a live,
@@ -40,10 +40,12 @@ checkpoint on: start, each tool call, each user interaction, and completion.
 
 ## 1. Start the log
 
-Create `SKILL_DEBUG_<skill-name>.md` in the current working directory,
-alongside whatever artifact the target skill itself produces (e.g. next to
-`GUIDE_ME.md` when debugging guide-me). Write a header: target skill name, its
-`SKILL.md` path, start timestamp, and the comparison mode fixed in step 0.
+Use `SKILL_DEBUG_<skill-name>.md` in the current working directory, alongside
+the target skill's artifact (e.g. `GUIDE_ME.md`). Create it if absent;
+otherwise append a run without altering earlier content. Begin each run with
+`## Run — <start timestamp>`, followed by the target name, `SKILL.md` path,
+and comparison mode. Following content belongs to that run until the next
+`## Run` heading.
 
 ## 2. Run the target skill, logging live
 
@@ -52,6 +54,11 @@ checkpoint identified in step 0, append a short entry to the log
 **immediately** — do not batch entries to write at the end. A long run's
 early context can be compacted before you reach the end, so the file is the
 durable record; memory alone is not.
+
+Log observable actions, decisions, and results — not hidden reasoning. For
+loaded content, note its source, purpose, relevant scope, and any readily
+available version; do not seek a version solely for the log. Summarize rather
+than copy, and redact sensitive data.
 
 Entry format:
 
@@ -67,8 +74,10 @@ Flag friction inline, in the same trace, as it happens:
   user had to correct course, an unplanned clarifying question was needed>
 ```
 
-Keep entries short — this is a trace, not a transcript. Log real friction
-only; do not manufacture entries to pad the log.
+Keep entries short — this is a trace, not a transcript. Consecutive successful
+actions of the same kind may share one entry unless a distinct decision or
+friction occurred. Never group failures, related retries, or user
+interactions. Log real friction only; do not manufacture it.
 
 ## 3. Early analysis on request
 
@@ -77,10 +86,13 @@ completion condition, stop the target skill's work where it stands, jump to
 step 4 using the trace collected so far, then ask whether to resume the
 target skill afterward.
 
+For an unfinished run, append `Status: incomplete` with its stopping point and
+compare only against evidence recorded so far.
+
 ## 4. Compare against the definition
 
 Once the target skill's own completion condition is met (or analysis was
-requested early), append a `## Comparison` section to the log:
+requested early), append a `### Comparison` section to the current run:
 
 - **Mode b**: go through the Definition of done criteria one by one; mark
   each met / not met / partially met, with a one-line reason citing what's in
@@ -92,7 +104,7 @@ requested early), append a `## Comparison` section to the log:
 
 ## 5. Analyze and suggest improvements
 
-Append a `## Analysis` section to the log, concisely covering:
+Append a `### Analysis` section to the current run, concisely covering:
 
 - How well the goal was reached, tied back to the comparison.
 - What went wrong, grouped by root cause where multiple friction entries
@@ -103,22 +115,29 @@ Append a `## Analysis` section to the log, concisely covering:
   "clarify Y", "add a Definition of done section"), not vague praise or
   criticism.
 
+Distinguish instruction flaws from environment or test-case failures. The
+analysis may use all runs to identify recurring friction, regressions, or
+improvements, but label cross-run evidence clearly. The comparison remains
+scoped to the current run and its target definition.
+
 Report a short summary to the user — not the full log — and point them to the
 log file for detail.
 
 ## Definition of done
 
-- [ ] `SKILL_DEBUG_<skill-name>.md` exists in the working directory with a
-      header naming the target skill, its `SKILL.md` path, and the comparison
-      mode.
-- [ ] The log contains at least one trace entry per checkpoint the target
-      skill actually passed through, written incrementally (not reconstructed
-      only at the end).
+- [ ] `SKILL_DEBUG_<skill-name>.md` contains a distinct current-run section
+      with start timestamp, target name and path, and comparison mode; earlier
+      runs remain unchanged.
+- [ ] The current run contains at least one trace entry per checkpoint the
+      target skill actually passed through, written incrementally (not
+      reconstructed only at the end).
 - [ ] Every friction that occurred during the run is logged as a `FRICTION:`
       entry at the point it happened.
-- [ ] A `## Comparison` section exists, using mode b against an explicit
-      Definition of done when the target has one, otherwise mode a with the
-      missing-section note stated explicitly.
-- [ ] A `## Analysis` section exists with concrete, actionable improvement
-      suggestions — not generic praise or criticism.
+- [ ] The current run has a `### Comparison` section, using mode b against an
+      explicit Definition of done when the target has one, otherwise mode a
+      with the missing-section note stated explicitly.
+- [ ] The current run has a `### Analysis` section with concrete, actionable
+      improvements, and clearly labels any evidence from earlier runs.
+- [ ] A run that stopped before target completion is marked incomplete with
+      its stopping point recorded.
 - [ ] The user received a short summary, not the full log inline.

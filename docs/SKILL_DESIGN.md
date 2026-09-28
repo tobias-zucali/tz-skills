@@ -92,5 +92,7 @@ In practice:
 process live to a log file, flags friction as it happens, and at the end
 compares the outcome against the target skill's Definition of done (falling
 back to prose-based judgment, explicitly flagged, if the section doesn't
-exist) before suggesting concrete improvements. Use it to evaluate any skill
-in this repo, including itself.
+exist) before suggesting concrete improvements. Use it to evaluate other
+skills in this repo. To evaluate `skill-debug` itself, perform a bounded
+static review with an explicit one-off instruction not to invoke it
+recursively.

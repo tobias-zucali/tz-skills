@@ -10,10 +10,10 @@ reads this format, independent of that packaging.
 - Before writing or editing any `SKILL.md`, read `docs/SKILL_DESIGN.md` —
   frontmatter conventions, the Definition of done section, and the
   cross-agent portability rule.
-- There is no build step, package manifest, or test suite beyond the skills
-  themselves — this is a markdown-only repo. To validate a skill, run
-  `skills/skill-debug` against it rather than looking for a test
-  command.
+- There is no build step or test suite — this is a markdown-only repo.
+  Structurally validate every changed skill with
+  `uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py <skill-directory>`.
+  For behavioral validation, run `skills/skill-debug` against it.
 - Keep `SKILL.md` bodies agent-neutral: don't name a specific tool by its
   exact Claude Code name as the only way to do something. Describe the
   action generically, and note the matching tool as the preferred path when
