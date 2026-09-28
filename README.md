@@ -72,6 +72,13 @@ way of loading them:
   `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
   similar to how Claude Code reads `~/.claude/skills/`.
 
+### Local Codex plugin development
+
+For live development of the complete plugin, see
+[`docs/CODEX_LOCAL_DEVELOPMENT.md`](docs/CODEX_LOCAL_DEVELOPMENT.md). It explains
+how to symlink individual skills into `$HOME/.agents/skills/` and optionally
+register this repository as a local Codex marketplace.
+
 ## Release conventions
 
 This repository follows [Semantic Versioning](https://semver.org/). The
