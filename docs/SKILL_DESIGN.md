@@ -9,6 +9,10 @@ correctly and easy to evaluate afterward.
   request to this skill: state concretely when to invoke it (trigger phrases,
   the situations that should match, the `/slash-command` name if any). Vague
   descriptions ("helps with tasks") cause both missed and wrong invocations.
+  Never put angle-bracket text such as `<skill-name>` in the frontmatter: the
+  Claude marketplace sync rejects a `description` containing anything that
+  looks like an XML tag and skips the skill. Use an uppercase placeholder
+  (`SKILL_NAME`) instead. Angle brackets are fine in the body.
 - **Body** — imperative instructions addressed to Claude, describing what to
   do, not what the skill "is". Structure into ordered sections when the skill
   has a real sequence (setup → do the work → finish); group by concern when it

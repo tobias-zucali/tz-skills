@@ -51,6 +51,17 @@ marketplace from `https://github.com/tobias-zucali/tz-skills`, then install
 **tz-skills** from that marketplace. Start a new chat after installation so the
 new skill catalog is loaded.
 
+#### Ask ChatGPT to install it
+
+You can paste this prompt into ChatGPT Work or Codex:
+
+> Install the `tz-skills` plugin from the personal marketplace at
+> `https://github.com/tobias-zucali/tz-skills`. First check whether the
+> marketplace and `tz-skills@tz-skills` are already installed, add or install
+> only what is missing, and verify that the plugin is enabled. If you cannot
+> complete a Plugins Directory step directly, tell me the exact action I need
+> to take. Finally, remind me to start a new chat so the bundled skills load.
+
 ### Claude Code
 
 [Official Anthropic plugin marketplace documentation](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)
@@ -61,6 +72,11 @@ In the Claude desktop app:
 2. Select **Add → Add marketplace → Add from a repository**.
 3. Enter `https://github.com/tobias-zucali/tz-skills` and select **Sync**.
 4. Under **From marketplaces you added**, open **Tz skills** and install it.
+   If it isn't listed there, search for `tz-skills` under **Customize →
+   Skills → Discover** and select **Add** on the **Tz skills** entry.
+
+The plugin is then available in local sessions only, not in Claude cloud
+sessions (see [below](#where-plugins-arent-available-eg-claude-cloud-sessions)).
 
 To review or update the marketplace later, open
 **Customize → Plugins → Yours → Add → Manage marketplaces**.
