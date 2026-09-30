@@ -62,6 +62,26 @@ claude plugin install tz-skills
 
 To pick up changes later: `claude plugin update tz-skills`.
 
+### Where plugins aren't available (e.g. Claude cloud sessions)
+
+Cloud sessions started from Claude Desktop or the web only clone the repo you
+point them at; they don't install this repo as a plugin, and `/plugin` reports
+"Plugins aren't available in this environment." The plugin flows above then
+don't apply, and `/guide-me` won't appear. Alternatives:
+
+- **claude.ai account skill** — zip a skill folder (`SKILL.md` at the top of
+  the folder) and upload it under Settings → Capabilities → Skills. It is then
+  available in every session, in any repo. It's a copy, so re-upload after
+  changing the skill. Custom uploads may depend on your plan or org settings.
+- **Project skill** — put (or symlink) `skills/<name>/` into the working repo's
+  `.claude/skills/<name>/`. Cloud sessions clone it, so the skill loads there.
+- **One-off** — ask the agent to read `skills/<name>/SKILL.md` and follow it.
+
+The `.claude-plugin/` marketplace files only help where Claude Code plugins are
+enabled (e.g. the local CLI). claude.ai has no equivalent for a personal
+marketplace repo as far as I know; org admins may be able to sync plugins from
+GitHub on Team/Enterprise plans (unverified).
+
 ### Other agents
 
 `SKILL.md` follows the open Agent Skills format ([agentskills.io](https://agentskills.io)),
