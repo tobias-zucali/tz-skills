@@ -60,6 +60,18 @@ claude plugin marketplace add https://github.com/tobias-zucali/tz-skills
 claude plugin install tz-skills
 ```
 
+Or, from inside a running Claude Code session:
+
+```
+/plugin marketplace add tobias-zucali/tz-skills
+/plugin install tz-skills@tz-skills
+/reload-plugins
+```
+
+After installing, the skills are available as `/tz-skills:guide-me` and
+`/tz-skills:skill-debug`. A private repo requires GitHub access (e.g. a working
+`gh auth login` or SSH key).
+
 To pick up changes later: `claude plugin update tz-skills`.
 
 ### Other agents
