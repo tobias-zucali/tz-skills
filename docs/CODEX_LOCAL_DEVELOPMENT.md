@@ -18,6 +18,7 @@ Set `REPO` to the absolute path of the checkout:
 REPO=/absolute/path/to/tz-skills
 mkdir -p "$HOME/.agents/skills"
 
+ln -s "$REPO/skills/detect-features" "$HOME/.agents/skills/detect-features"
 ln -s "$REPO/skills/guide-me" "$HOME/.agents/skills/guide-me"
 ln -s "$REPO/skills/skill-debug" "$HOME/.agents/skills/skill-debug"
 ```
@@ -36,21 +37,25 @@ thread may retain the skill catalog and instructions it loaded when it started.
 ## Verify the links
 
 ```bash
+test -L "$HOME/.agents/skills/detect-features"
 test -L "$HOME/.agents/skills/guide-me"
 test -L "$HOME/.agents/skills/skill-debug"
 
+readlink "$HOME/.agents/skills/detect-features"
 readlink "$HOME/.agents/skills/guide-me"
 readlink "$HOME/.agents/skills/skill-debug"
 ```
 
 The output should point into this repository. In a newly started Codex thread,
-`guide-me` and `skill-debug` should then appear in the available skills.
+`detect-features`, `guide-me`, and `skill-debug` should then appear in the
+available skills.
 
 ## Remove the links
 
 Removing these links does not remove the repository or its skill files:
 
 ```bash
+unlink "$HOME/.agents/skills/detect-features"
 unlink "$HOME/.agents/skills/guide-me"
 unlink "$HOME/.agents/skills/skill-debug"
 ```
@@ -73,6 +78,7 @@ To switch from live development to testing the packaged plugin, first remove
 the direct links and then install it:
 
 ```bash
+unlink "$HOME/.agents/skills/detect-features"
 unlink "$HOME/.agents/skills/guide-me"
 unlink "$HOME/.agents/skills/skill-debug"
 codex plugin add tz-skills@tz-skills

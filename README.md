@@ -5,6 +5,9 @@ across machines instead of copied into each agent's skills directory.
 
 ## Skills
 
+- **detect-features** — evidence-backed detection of general runtime abilities
+  and portable, ChatGPT/Codex, and Claude plugin-component support. Produces a
+  compact machine-readable manifest plus a short human summary.
 - **guide-me** — step-by-step guided walkthrough of a task list,
   setup process, or multi-part goal. Tracks progress in `GUIDE_ME.md` and pauses
   for confirmation after each step.
