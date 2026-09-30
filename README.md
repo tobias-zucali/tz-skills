@@ -28,19 +28,28 @@ by copying it into wherever that agent looks for skills.
 
 ## Installing
 
-### ChatGPT desktop app
+### ChatGPT desktop app and Codex CLI
 
-[Official OpenAI plugin marketplace documentation](https://developers.openai.com/plugins/build/plugins)
+[Official OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins)
 
-1. Open **Customize → Plugins**.
-2. Select **Add → Add plugin marketplace**.
-3. Enter the following values:
-   - **Source:** `git@github.com:tobias-zucali/tz-skills.git`
-   - **Git ref:** `main`
-   - **Sparse paths:** `plugins/codex`
-4. Select **Add marketplace**.
-5. In the **Personal** tab, find the **tz-skills** marketplace and select **+**
-   next to **tz-skills** to install it.
+From a terminal, add the marketplace and install the plugin:
+
+```bash
+codex plugin marketplace add tobias-zucali/tz-skills
+codex plugin add tz-skills@tz-skills
+```
+
+Verify the result:
+
+```bash
+codex plugin marketplace list
+codex plugin list
+```
+
+Alternatively, open the Plugins directory in the ChatGPT desktop app, add a
+marketplace from `https://github.com/tobias-zucali/tz-skills`, then install
+**tz-skills** from that marketplace. Start a new chat after installation so the
+new skill catalog is loaded.
 
 ### Claude Code
 
@@ -60,20 +69,30 @@ Alternatively, use the CLI:
 
 ```bash
 claude plugin marketplace add https://github.com/tobias-zucali/tz-skills
-claude plugin install tz-skills
+claude plugin install tz-skills@tz-skills
 ```
 
-To pick up changes later: `claude plugin update tz-skills`.
+To pick up changes later: `claude plugin update tz-skills@tz-skills`. Start a
+new session after installing or updating the plugin.
+
+### Ask an agent to install it
+
+You can give a local coding agent this prompt:
+
+> Install the `tz-skills` marketplace and plugin from
+> `https://github.com/tobias-zucali/tz-skills`. First check whether the
+> marketplace and `tz-skills@tz-skills` are already installed, add only what
+> is missing using the host's official plugin commands, verify that the plugin
+> is installed and enabled, and tell me whether I need to restart the app or
+> start a new session. Do not modify the plugin repository.
 
 ### Other agents
 
 `SKILL.md` follows the open Agent Skills format ([agentskills.io](https://agentskills.io)),
 so the skills themselves work elsewhere too — each platform just has its own
-way of loading them:
-
-- **OpenAI Codex CLI** — copy or symlink `skills/<name>/` into
-  `.agents/skills/` (project-local) or `$HOME/.agents/skills/` (global),
-  similar to how Claude Code reads `~/.claude/skills/`.
+way of loading them. If a host does not support plugin marketplaces, copy or
+symlink the desired `skills/<name>/` directory into that host's skill search
+path.
 
 ### Local Codex plugin development
 
