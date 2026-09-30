@@ -86,6 +86,38 @@ You can give a local coding agent this prompt:
 > is installed and enabled, and tell me whether I need to restart the app or
 > start a new session. Do not modify the plugin repository.
 
+### Where plugins aren't available (e.g. Claude cloud sessions)
+
+Cloud sessions started from Claude Desktop or the web only clone the repo you
+point them at; they don't install this repo as a plugin, and `/plugin` reports
+"Plugins aren't available in this environment." The plugin flows above then
+don't apply, and `/guide-me` won't appear. Alternatives:
+
+- **claude.ai account skill** — zip a skill folder (`SKILL.md` at the top of
+  the folder) and upload it under Settings → Capabilities → Skills. It is then
+  available in every session, in any repo. It's a copy, so re-upload after
+  changing the skill. Custom uploads may depend on your plan or org settings.
+- **Project skill** — put (or symlink) `skills/<name>/` into the working repo's
+  `.claude/skills/<name>/`. Cloud sessions clone it, so the skill loads there.
+- **One-off** — ask the agent to read `skills/<name>/SKILL.md` and follow it.
+- **Org-level sharing (Team/Enterprise only)** — an organization owner can
+  sync this repo as a marketplace under Organization settings → Plugins &
+  skills → Marketplaces. Sync reads the repo through the Claude GitHub App
+  (which must be installed on it), runs once on connect, and can optionally
+  keep syncing automatically via a webhook. The owner then sets each plugin's
+  availability: hidden, available to install, installed for everyone, or
+  required. Individual plugin ZIPs can also be uploaded there, and the page
+  has an Organization skills tab. Members then get the skills in claude.ai and
+  Cowork without installing anything. Not tested with this repo, so whether
+  its `marketplace.json` layout is accepted as-is is unverified. This route
+  needs an org owner, so it doesn't apply to individual (Free/Pro/Max)
+  accounts. See [Manage plugins for your organization](https://support.claude.com/en/articles/13837433-manage-plugins-for-your-organization)
+  and [org sync](https://claude.com/docs/plugins/org-sync).
+
+The `.claude-plugin/` marketplace files only help where Claude Code plugins are
+enabled (e.g. the local CLI) or where an org syncs them. There is no
+equivalent for a personal marketplace repo on an individual account.
+
 ### Other agents
 
 `SKILL.md` follows the open Agent Skills format ([agentskills.io](https://agentskills.io)),
