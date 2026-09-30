@@ -76,11 +76,23 @@ don't apply, and `/guide-me` won't appear. Alternatives:
 - **Project skill** — put (or symlink) `skills/<name>/` into the working repo's
   `.claude/skills/<name>/`. Cloud sessions clone it, so the skill loads there.
 - **One-off** — ask the agent to read `skills/<name>/SKILL.md` and follow it.
+- **Org-level sharing (Team/Enterprise only)** — an organization owner can
+  sync this repo as a marketplace under Organization settings → Plugins &
+  skills → Marketplaces. Sync reads the repo through the Claude GitHub App
+  (which must be installed on it), runs once on connect, and can optionally
+  keep syncing automatically via a webhook. The owner then sets each plugin's
+  availability: hidden, available to install, installed for everyone, or
+  required. Individual plugin ZIPs can also be uploaded there, and the page
+  has an Organization skills tab. Members then get the skills in claude.ai and
+  Cowork without installing anything. Not tested with this repo, so whether
+  its `marketplace.json` layout is accepted as-is is unverified. This route
+  needs an org owner, so it doesn't apply to individual (Free/Pro/Max)
+  accounts. See [Manage plugins for your organization](https://support.claude.com/en/articles/13837433-manage-plugins-for-your-organization)
+  and [org sync](https://claude.com/docs/plugins/org-sync).
 
 The `.claude-plugin/` marketplace files only help where Claude Code plugins are
-enabled (e.g. the local CLI). claude.ai has no equivalent for a personal
-marketplace repo as far as I know; org admins may be able to sync plugins from
-GitHub on Team/Enterprise plans (unverified).
+enabled (e.g. the local CLI) or where an org syncs them. There is no
+equivalent for a personal marketplace repo on an individual account.
 
 ### Other agents
 
