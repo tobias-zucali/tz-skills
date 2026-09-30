@@ -18,7 +18,10 @@ guess.
 
 Locate that skill's `SKILL.md` (search likely locations: this repo's
 `skills/*/*/`, a project's `.claude/skills/`, installed plugin skill
-directories, `~/.claude/skills/`) and read it in full. This is the skill's
+directories, `~/.claude/skills/`) and read it in full. If the runtime has
+already supplied the complete contents from an unambiguous path and treats
+that as an authoritative read, reuse them rather than reading the same file
+again solely for duplication; otherwise read the file. This is the skill's
 *definition*: its stated purpose, its process, and — if present — an explicit
 `## Definition of done` section (see `docs/SKILL_DESIGN.md` for the
 convention).
@@ -36,7 +39,16 @@ Fix the comparison mode now and record it in the log header:
 Also note the target skill's own natural checkpoints (its defined steps or
 phases — e.g. guide-me's numbered sections and its per-step loop). These set
 the granularity for the trace. If the target has no clear internal steps,
-checkpoint on: start, each tool call, each user interaction, and completion.
+checkpoint on semantic phase transitions, before yielding to the user, and at
+completion — not on every tool call. Failures, retries, distinct decisions,
+and user interactions are always separate checkpoints.
+
+Use a compact trace when the target has a single natural phase and no user
+interaction is expected. A successful compact run needs only setup, at most
+one in-phase append if the phase is long enough to need a durable intermediate
+record, and the combined final append described in step 4. Switch to the
+normal semantic trace if the target develops additional phases, needs user
+input, or encounters friction.
 
 ## 1. Start the log
 
@@ -55,15 +67,20 @@ git version control, check whether it's already ignored; if not, exclude it
 locally (append it to `.git/info/exclude` — a local, uncommitted ignore list,
 not the tracked `.gitignore`) rather than leave it exposed. Skip this if it's
 already ignored, the directory isn't under version control, or the user has
-said they want this particular file tracked.
+said they want this particular file tracked. Where the runtime permits it,
+perform this check or exclusion and initialize the log in one setup
+interaction.
 
 ## 2. Run the target skill, logging live
 
 Follow the target skill's own instructions to actually do its job. At each
 checkpoint identified in step 0, append a short entry to the log
-**immediately** — do not batch entries to write at the end. A long run's
-early context can be compacted before you reach the end, so the file is the
-durable record; memory alone is not.
+**immediately**. Consecutive successful actions within one semantic phase may
+be recorded in one append when that phase ends; do not defer the whole trace
+until the end. Flush the active phase before yielding to the user, when a
+failure, retry, distinct decision, or user interaction occurs, and before a
+long run risks losing early context. The file is the durable record; memory
+alone is not.
 
 Log observable actions, decisions, and results — not hidden reasoning. For
 loaded content, note its source, purpose, relevant scope, and any readily
@@ -89,6 +106,20 @@ actions of the same kind may share one entry unless a distinct decision or
 friction occurred. Never group failures, related retries, or user
 interactions. Log real friction only; do not manufacture it.
 
+For a successful single-phase target, use no more than two wrapper-only write
+interactions (interactions whose only purpose is updating the debug log) after
+initialization: one optional intermediate append and one final append.
+Failures, retries, user interactions, Git-safety actions, and additional
+semantic phases may exceed this budget.
+
+If the user is investigating duration or wrapper overhead, add a concise
+performance note using metadata the runtime already exposes: total wall-clock
+duration, target and wrapper interaction counts, and tool-reported durations.
+Do not add tool calls solely to collect timing data. Label any remainder as
+unattributed elapsed time that can include model processing, scheduling,
+serialization, transport, and other runtime overhead; do not present it as
+exact orchestration time.
+
 ## 3. Early analysis on request
 
 If the user asks for the analysis before the target skill reaches its own
@@ -102,7 +133,8 @@ compare only against evidence recorded so far.
 ## 4. Compare against the definition
 
 Once the target skill's own completion condition is met (or analysis was
-requested early), append a `### Comparison` section to the current run:
+requested early), append its completion trace entry and a `### Comparison`
+section to the current run:
 
 - **Mode b**: go through the Definition of done criteria one by one; mark
   each met / not met / partially met, with a one-line reason citing what's in
@@ -112,9 +144,14 @@ requested early), append a `### Comparison` section to the current run:
   `<skill-name>`; this comparison is prose-based judgment, not a mechanical
   check." Carry this into step 5 as an improvement suggestion too.
 
+Prepare the `### Analysis` section from step 5 at the same endpoint and append
+the completion entry, comparison, and analysis together in one final write
+interaction when the runtime permits it.
+
 ## 5. Analyze and suggest improvements
 
-Append a `### Analysis` section to the current run, concisely covering:
+If it was not already included in the combined final append from step 4,
+append a `### Analysis` section to the current run. Cover concisely:
 
 - How well the goal was reached, tied back to the comparison.
 - What went wrong, grouped by root cause where multiple friction entries
@@ -159,6 +196,9 @@ runs still being there), or otherwise explicitly asks to keep it.
 - [ ] The current run contains at least one trace entry per checkpoint the
       target skill actually passed through, written incrementally (not
       reconstructed only at the end).
+- [ ] A successful single-phase run stayed within two wrapper-only write
+      interactions after initialization unless a stated exception required
+      more.
 - [ ] Every friction that occurred during the run is logged as a `FRICTION:`
       entry at the point it happened.
 - [ ] The current run has a `### Comparison` section, using mode b against an
