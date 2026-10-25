@@ -5,6 +5,9 @@ across machines instead of copied into each agent's skills directory.
 
 ## Skills
 
+- **grill-me** — stress-test a plan or idea through one question at a time,
+  using the runtime's structured question tool when available. Adapted from
+  Matt Pocock's workflow; see the [research notes](docs/research/grill-me-question-tools.md).
 - **detect-features** — evidence-backed detection of general runtime abilities
   and portable, ChatGPT/Codex, and Claude plugin-component support. Produces a
   compact machine-readable manifest plus a short human summary.
