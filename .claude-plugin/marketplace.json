@@ -1,12 +1,12 @@
 {
   "name": "tz-skills",
   "owner": { "name": "Tobias" },
-  "description": "Personal Claude Code skills.",
+  "description": "Tobias Zucali's personal Claude Code skills (tz = Tobias Zucali, not timezone).",
   "plugins": [
     {
       "name": "tz-skills",
       "source": "./",
-      "description": "Tools for my personal workflow.",
+      "description": "Tobias Zucali's personal workflow tools (tz = Tobias Zucali, not timezone).",
       "category": "productivity"
     }
   ]

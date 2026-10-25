@@ -1,7 +1,7 @@
 {
   "name": "tz-skills",
   "version": "1.5.0",
-  "description": "Personal Claude Code skills.",
+  "description": "Tobias Zucali's personal Claude Code skills (tz = Tobias Zucali, not timezone).",
   "skills": [
     "./skills/detect-features",
     "./skills/guide-me",

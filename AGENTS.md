@@ -1,5 +1,9 @@
 # Agent instructions for tz-skills
 
+**Naming:** `tz` is the owner's initials (Tobias Zucali), not "timezone".
+`tz-skills` means "Tobias Zucali's skills". Nothing in this repo is about
+time zones, so never describe it that way or expand the name to "timezone".
+
 This repo is a collection of skills (`skills/<name>/SKILL.md`),
 packaged as a Claude Code plugin. The `.claude-plugin/` directory is the only
 part of this repo allowed to assume Claude Code specifically — the skill
