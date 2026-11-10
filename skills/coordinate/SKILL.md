@@ -1,6 +1,6 @@
 ---
 name: coordinate
-description: Run long multi-step work as a coordinator that delegates implementation, reviews, and test runs to separate agent sessions, keeps shared state in a durable file instead of chat history, and spends the context and usage budget deliberately. Use when the user asks to coordinate or orchestrate work across sessions, to run a guide autonomously with delegated sessions, when GUIDE_ME.md declares a coordinated mode, or invokes /coordinate.
+description: Run long multi-step work as a coordinator that delegates implementation, reviews, and test runs to separate agent sessions, keeps shared state in a durable file instead of chat history, and spends the context and usage budget deliberately. Use when the user asks to coordinate or orchestrate work across sessions, to run a guide with delegated sessions (step by step by default, autonomously on request), when GUIDE_ME.md declares a coordinated mode, or invokes /coordinate.
 ---
 
 Act as the coordinator of a long piece of work: hold the plan, the user's decisions,
@@ -25,10 +25,28 @@ models, context windows, caching, pricing, or quotas change.
    guide, a contributing file, the project's agent instructions). If a system has no
    documented rules, ask the user how it is kept before writing to it. Read the state
    and the items it points to — not the whole tracker.
-2. Confirm the mode line. It states that work runs without confirmation pauses and
-   lists what still waits for the user (typically: commits, pushes, outgoing messages,
-   replies on shared platforms, and the user's own decisions). If the file has no such
-   line, ask the user for it and record it with the date of their instruction.
+2. Settle the pace without stopping to ask about it. Coordination decides how work is
+   routed, not how often the user is consulted; running without confirmation pauses is
+   opt-in.
+   - **Step mode** (default): delegate and verify the current step, report its
+     result, and wait for the user's go-ahead before starting the next one. Start
+     units of a later step early only when the user agrees. Say once, in the first
+     report, that the user can switch to autonomous mode.
+   - **Autonomous mode**: only when the user says so in this conversation (for
+     example "autonomous", "without pauses", "keep going on your own"), or when the
+     state already records it (for `GUIDE_ME.md`, its mode line). A request to
+     coordinate or continue is not by itself that instruction. Continue with the
+     next actionable steps after each report, and stop only for what waits for the
+     user.
+   - **What waits for the user** in either mode: what the user named, or a list the
+     state records, otherwise the default — commits, pushes, outgoing messages,
+     replies on shared platforms, actions only the user can take (measurements,
+     physical or account actions), and the user's own decisions — plus anything the
+     project's or user's agent instructions reserve.
+   - Do not require a particular state format. Record the pace and the list only
+     where the owning rules provide a place for them (for `GUIDE_ME.md`, a dated mode
+     line as the `guide-me` skill describes, written only for autonomous mode), and
+     otherwise state them in the first report.
 3. Check what the agent can do and adapt:
    - **Separate sessions** (sessions the user can open, steer and stop): delegate as
      described below.
@@ -46,10 +64,12 @@ models, context windows, caching, pricing, or quotas change.
   history small: do inline only what section 4 assigns to the coordinator, and route
   implementation, reviews, and test runs as that section decides.
 - Each coordinator turn, take the next steps from the state, separate what is
-  actionable now from what waits on the user or third parties, route the actionable
-  units (section 4), and surface the waiting ones as open user items.
-- Ask the user only for what the mode line reserves for them, and for decisions that
-  do not follow from anything they have already said.
+  actionable now (in step mode: within the current step) from what waits on the user
+  or third parties, route the actionable units (section 4), and surface the waiting
+  ones as open user items.
+- Ask the user only for what waits for them (section 0, item 2), for the go-ahead
+  between steps in step mode, and for decisions that do not follow from anything they
+  have already said.
 - Treat a session's report as a claim, not proof: check the diff, file, or result it
   names before you mark the step done.
 
@@ -72,7 +92,15 @@ Write state through each system's own rules, not a format of your own:
 Keep the state current at every point where a fresh session might take over: before
 a turn ends, the state reflects each event of that turn — a verified result, a user
 decision or approval, a delegated session started or finished, an accepted plan
-revision. Several events of one turn go into one update. Delegated sessions that write to a
+revision. Several events of one turn go into one update.
+
+Whether the work is coordinated needs no marker in the state: a coordinator starts
+because the user asks for one or a handover names it (section 7), and a delegated
+session learns its role from its brief. What the state must show, in every mode and
+in whatever form the owning rules allow, is the work in flight: each running
+delegated session, what it is doing, the files or items it touches, and where its
+result will arrive. Any later session, coordinated or not, can then see what not to
+touch. Remove an entry when its session finishes. Delegated sessions that write to a
 shared system follow the same owning rules; name them in the brief. When the
 coordinator alone owns a file (usually `GUIDE_ME.md`), sessions report back and the
 coordinator writes it.
@@ -192,8 +220,10 @@ handing over:
    tracker, not only in chat.
 3. Offer to archive finished delegated sessions and remove their working trees — only
    on the user's yes — so the next coordinator starts from a short session list.
-4. Tell the user to open a new coordinator on the state file (or start it yourself if
-   the agent can and the user has agreed).
+4. Give the user a ready-to-use way back in: the request that opens a new coordinator
+   on this state, naming the skill, the state file or tracker, and the pace (for
+   example "/coordinate on `GUIDE_ME.md`, step mode"). Start it yourself only if the
+   agent can and the user has agreed.
 
 ## 8. Close out
 
@@ -204,8 +234,11 @@ as the `guide-me` skill describes.
 
 ## Definition of done
 
-- [ ] The state file carries a dated mode line listing what waits for the user, and
-      nothing on that list was done without the user's explicit approval.
+- [ ] Coordination started without a pause to ask for a mode or format. It ran in
+      step mode unless the user or the state opted into autonomous mode; the pace and
+      what waits for the user were recorded where the owning rules allow it or stated
+      in the first report, and nothing on that list was done without the user's
+      explicit approval.
 - [ ] Each unit's route (inline, subagent, existing or new session, script) and model
       tier was chosen by the cost rules in section 4; every delegated session received a
       brief naming task, files, done criterion, and constraints; reviews ran in fresh
@@ -218,5 +251,8 @@ as the `guide-me` skill describes.
 - [ ] Each coordination system was written through its owning rules (for
       `GUIDE_ME.md`, the `guide-me` skill) and updated at every verified result,
       user decision, session start or finish, and accepted plan revision.
+- [ ] Running delegated sessions, with what each touches, were in the state for as
+      long as they ran, not only at handover.
 - [ ] At rotation or close-out, the state file holds current state, next steps, open
-      user items, and running sessions, so a fresh session can continue from it alone.
+      user items, and running sessions, so a fresh session can continue from it alone,
+      and the user received a ready-to-use request to reopen the coordinator.

@@ -155,8 +155,8 @@ the same turn share one update). Suggested format:
 Started: <date>
 
 ## Done
-- [x] Step 1 — <short outcome summary>
-- [x] Step 2 — <short outcome summary>
+- [x] Step 1 — <one-line outcome> (<where the details live: commit, doc, issue>)
+- [x] Step 2 — <one-line outcome> (<pointer>)
 
 ## In progress
 - [ ] Step 3 — <what's happening>
@@ -166,7 +166,7 @@ Started: <date>
 - [ ] Step 5
 
 ## Notes
-- <decisions made, things to remember, blockers resolved>
+- <only what an open step still needs: a decision, a constraint, a pointer>
 ```
 
 This file is what makes the guide resumable: if the session ends, a later invocation
@@ -200,16 +200,40 @@ Mode: <mode line, see Pace modes>
 - [ ] <step or issue> — <state>
 ```
 
-Keep the details in the project's own records (issues, docs, tests, Git history) and
-link to them; the guide holds sequence, state, and pointers. Project-specific
-operating notes belong in the project's documentation. The guide links to them
-instead of carrying a copy.
+### Keep it current and small
 
-**Compact instead of growing.** When finished steps are recorded durably elsewhere
-(Git history, a closed-issues list, the tracker), remove them from the guide and update
-the `compacted <date>` stamp in the header. Compaction only removes finished items; it
-never changes what an item said, and anything not yet recorded elsewhere moves to its
-proper home first (as in section 5).
+Both formats follow these rules. Every resume and every delegated session reads the
+whole file, and a file that only grows soon contradicts itself.
+
+- **Pointers, not copies.** Keep the details in the project's own records (issues,
+  docs, tests, Git history) and link to them; the guide holds sequence, state, and
+  pointers. Test procedures, measured values, and operating notes belong in the
+  project's documentation, not in the guide.
+- **One state, updated in place.** The step list (and in the programme format the
+  `Current state` section) is the only description of where things stand. When the
+  state changes, rewrite it there; never add a second dated state, resume, or
+  "proposed sequence" section beside it. When new work joins the guide, merge its
+  steps into the existing lists.
+- **Notes are not a log.** Write a finding to its proper home (the project's docs,
+  the step's Done entry, the tracker) in the same update. Notes keep only what an open
+  step still needs, and an entry goes when its step is done and the entry is recorded
+  elsewhere.
+- **Done is one line.** Record a finished step as its outcome in one line plus a
+  pointer to where the details live.
+- **Compact instead of growing.** At the end of a phase, and whenever the file passes
+  about 150 lines or 15 KB (starting values, not limits), compact it in the same turn:
+  remove finished items that are recorded durably elsewhere (Git history, a
+  closed-issues list, the tracker, the project's docs), and update the `compacted
+  <date>` stamp in the header. Compaction removes and shortens; it never changes what
+  an item says. A Done entry may shrink to its one-line outcome once its details are
+  at the pointer. Anything not yet recorded elsewhere moves to its proper home first
+  (as in section 5). If the proper home is a tracked file, propose that move for the
+  user's review and keep the entry in Notes until it is accepted; the next step need
+  not wait for it. A note that is obsolete and has no proper home is listed for the
+  user to drop, not moved.
+- **Merging duplicate states is not a plan revision** when it only renames or
+  regroups the same open work (an older step list folded into a newer one). Report
+  the mapping. If merging drops or adds work, it is a revision (section 3, item 6).
 
 **Keep it out of version control by default.** `GUIDE_ME.md` is session scratch
 state, not a repo artifact — it's easy to sweep into an unrelated commit via
@@ -251,6 +275,10 @@ programme is done.
 
 - [ ] `GUIDE_ME.md` exists and reflects the current plan and state, updated after
       every step (not reconstructed only at the end).
+- [ ] `GUIDE_ME.md` describes the state once and consistently: its current state,
+      step lists, and open items agree; Done entries are one line with a pointer;
+      Notes hold only what open steps need; and it was compacted at each phase end
+      or when it passed the size trigger.
 - [ ] In a git-versioned directory, `GUIDE_ME.md` is excluded from accidental
       commits (already ignored, newly excluded, or the user explicitly chose to
       track it).
