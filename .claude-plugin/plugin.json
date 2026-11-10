@@ -1,11 +1,12 @@
 {
   "name": "tz-skills",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Tobias Zucali's personal Claude Code skills (tz = Tobias Zucali, not timezone).",
   "skills": [
     "./skills/detect-features",
     "./skills/guide-me",
     "./skills/skill-debug",
-    "./skills/grill-me"
+    "./skills/grill-me",
+    "./skills/coordinate"
   ]
 }

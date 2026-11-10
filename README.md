@@ -13,7 +13,11 @@ across machines instead of copied into each agent's skills directory.
   compact machine-readable manifest plus a short human summary.
 - **guide-me** — step-by-step guided walkthrough of a task list,
   setup process, or multi-part goal. Tracks progress in `GUIDE_ME.md` and pauses
-  for confirmation after each step.
+  for confirmation after each step, or runs autonomously when the user sets that
+  mode; a programme format keeps long multi-track work resumable.
+- **coordinate** — runs long work as a coordinator that delegates
+  implementation, reviews, and test runs to separate sessions, keeps state in
+  `GUIDE_ME.md`, and spends the context and usage budget at checkpoints.
 - **skill-debug** — wraps another skill's execution, logging its process
   and any friction live to `SKILL_DEBUG_<skill-name>.md`, then compares the
   outcome against that skill's own Definition of done (falling back to

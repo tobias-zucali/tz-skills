@@ -1,6 +1,6 @@
 ---
 name: guide-me
-description: Step-by-step guided walkthrough of a task list, setup process, or multi-part goal. Breaks work into reportable steps, tracks done/open state in GUIDE_ME.md, and pauses for confirmation after each step. Use when the user wants to be walked/guided through something, asks to go step by step, or invokes /guide-me.
+description: Step-by-step guided walkthrough of a task list, setup process, or multi-part goal. Breaks work into reportable steps, tracks done/open state in GUIDE_ME.md, and pauses for confirmation after each step unless the user has set an autonomous mode; also keeps long-running multi-track programmes resumable. Use when the user wants to be walked/guided through something, asks to go step by step, or invokes /guide-me.
 ---
 
 Guide the user through a task (a TODO list, a setup process, a migration, anything
@@ -13,7 +13,10 @@ Before anything else, check for `GUIDE_ME.md` in the current working directory.
 
 - **If it exists**: read it. Summarize the current state (done / in progress / open)
   back to the user and ask whether to resume this guide, append new tasks to it, or
-  start a fresh one (which replaces it — confirm before overwriting).
+  start a fresh one (which replaces it — confirm before overwriting). Honour its mode
+  line (see [Pace modes](#pace-modes)) and its format (step list or programme, see
+  section 4). A guide whose mode line names a coordinator also follows the
+  `coordinate` skill.
 - **If the user's prompt includes new tasks while a `GUIDE_ME.md` already exists**:
   default to appending the new tasks to the open list rather than replacing it,
   unless they say otherwise.
@@ -46,7 +49,8 @@ it with the user. This is a real planning pass, not a rubber stamp:
 - A step often splits into a part the agent can do itself (a check, a lookup, a
   doc cross-reference) and a part only the user can do (an account action, a
   browser click). Note that split in the step description instead of treating
-  every open item as pure "tell the user what to click."
+  every open item as pure "tell the user what to click." Mark the user's part with a
+  leading `(user)` and the agent's part with `(agent)` where a step has both.
 - Phrase a step that verifies existing behavior against documentation as "do X,
   and fix any doc/behavior mismatch found" — not just "verify X." The check
   itself is rarely the valuable output; a live-test step's real job is usually
@@ -69,7 +73,8 @@ it with the user. This is a real planning pass, not a rubber stamp:
 
 For each step, in order:
 
-1. Do the work for that step only — do not start the next step's work. If the step
+1. Do the work for that step only — do not start the next step's work (in autonomous
+   mode, independent steps may run together; see [Pace modes](#pace-modes)). If the step
    hands the user a URL, target, or value to act on, verify it live first (it
    resolves, it matches what's documented) rather than reciting it unchecked from a
    checklist or doc — that verification is itself a place real mismatches surface.
@@ -78,10 +83,12 @@ For each step, in order:
    the `GUIDE_ME.md` update; skipping it is easy to do silently and easy to miss.
 3. Report the concrete result of this step (what happened, what it produced, any
    problems hit) — concisely, no filler.
-4. **Stop and wait.** Do not proceed to the next step until the user explicitly
+4. **Stop and wait** (step mode; for autonomous mode see [Pace modes](#pace-modes)).
+   Do not proceed to the next step until the user explicitly
    confirms (e.g. "next", "continue", "looks good") or gives feedback that changes
-   the plan. This holds even under a general "keep going without asking" mode — the
-   entire point of this skill is that the user sets the pace.
+   the plan. This holds even under a general "keep going without asking" remark in
+   chat — the entire point of this skill is that the user sets the pace, and they
+   change it only by setting a mode.
    A confirmation such as "done", "erledigt", or "looks good" both closes the
    current step and normally authorizes starting the next open step in the agreed
    order. Do not ask for separate permission merely to proceed. Ask again when the
@@ -115,10 +122,32 @@ If the user's feedback changes scope (adds, removes, or reorders tasks), that re
 already is the confirmation — update the plan and `GUIDE_ME.md` accordingly before
 continuing, no separate approval round needed.
 
+### Pace modes
+
+The user sets the pace; the mode line at the top of `GUIDE_ME.md` records it.
+
+- **Step mode** (default, no mode line needed): every step ends with item 4 above.
+- **Autonomous mode**: only on an explicit user instruction to run the guide without
+  confirmation pauses. Record it as a mode line with the date of that instruction and
+  the list of what still waits for the user, for example:
+  `Mode: autonomous (user instruction 2026-10-26); waits for the user: commits, pushes,
+  outgoing messages, the user's own decisions.`
+  In this mode, after reporting a step's result, continue with the next open step.
+  Steps that do not depend on each other may run together or in parallel, and the
+  results of several small steps may share one report and one `GUIDE_ME.md` update.
+  When a unit of work stops being worth a separate step, merge it into a related
+  step. Still stop for anything on the waits-for list, for decisions only the user can make
+  (item 5), and for plan revisions that change the agreed scope (item 6); revisions
+  inside the agreed scope (order, splitting a step) are applied and reported. If the
+  work is delegated to separate sessions, add "run by a coordinator" to the mode line
+  and follow the `coordinate` skill.
+- The user can switch modes at any time; update the mode line in the same turn.
+
 ## 4. Track state in GUIDE_ME.md
 
 Keep `GUIDE_ME.md` in the current working directory as the durable source of truth,
-updated after every step (not just at the end). Suggested format:
+updated after every step (not just at the end; in autonomous mode, steps finished in
+the same turn share one update). Suggested format:
 
 ```markdown
 # Guide: <short title>
@@ -144,6 +173,43 @@ This file is what makes the guide resumable: if the session ends, a later invoca
 of this skill in the same directory — a `/guide-me` slash command or whatever else
 matches the trigger phrasing in this skill's description — should read it and pick up
 exactly where things left off.
+
+### Programme format
+
+Use this format instead when the guide covers open-ended work with several parallel
+tracks that outlives many sessions (a product launch, a multi-month migration), or
+when the user asks for it:
+
+```markdown
+# Guide: <short title>
+
+Started: <date> · compacted <date>
+
+Mode: <mode line, see Pace modes>
+
+## Current state (<date>)
+- <what is live or true now, with the references that prove it>
+
+## Next steps, in order
+1. <step> — (agent) <part> · (user) <part>
+
+## Open user items
+- <decisions, approvals, or actions only the user can take>
+
+## Track <X> — <name>
+- [ ] <step or issue> — <state>
+```
+
+Keep the details in the project's own records (issues, docs, tests, Git history) and
+link to them; the guide holds sequence, state, and pointers. Project-specific
+operating notes belong in the project's documentation. The guide links to them
+instead of carrying a copy.
+
+**Compact instead of growing.** When finished steps are recorded durably elsewhere
+(Git history, a closed-issues list, the tracker), remove them from the guide and update
+the `compacted <date>` stamp in the header. Compaction only removes finished items; it
+never changes what an item said, and anything not yet recorded elsewhere moves to its
+proper home first (as in section 5).
 
 **Keep it out of version control by default.** `GUIDE_ME.md` is session scratch
 state, not a repo artifact — it's easy to sweep into an unrelated commit via
@@ -177,6 +243,10 @@ paused), or asks to keep it. If they want it kept **and** shared with others (no
 just left on disk for themselves), that means actually tracking it — say so and let
 them decide, since the default above keeps it locally excluded.
 
+A programme guide that the user tracks as a durable coordination overview is not
+removed when one phase ends: compact it, and finish it as above only when the whole
+programme is done.
+
 ## Definition of done
 
 - [ ] `GUIDE_ME.md` exists and reflects the current plan and state, updated after
@@ -190,13 +260,16 @@ them decide, since the default above keeps it locally excluded.
       waited for explicit user confirmation where required; that confirmation also
       authorized starting the next agreed open step without a redundant permission
       question, unless that step required distinct authorization.
-- [ ] No step's work started before the user confirmed the previous one, except where
-      the user's own feedback changed the plan.
+- [ ] In step mode, no step's work started before the user confirmed the previous
+      one, except where the user's own feedback changed the plan. In autonomous mode,
+      a dated mode line records the user's instruction and what waits for the user,
+      and nothing on that list was done without the user's approval.
 - [ ] Any mid-execution plan revision — whether from user feedback or from something
       discovered during a step — was reflected in `GUIDE_ME.md`; revisions the agent
       itself proposed (not requested by the user) were confirmed before being applied,
-      and no step already marked **Done** was silently rewritten.
+      and no step already marked **Done** was silently rewritten (compaction removes
+      finished items only after they are recorded elsewhere).
 - [ ] At finishing: `GUIDE_ME.md` is marked complete, a summary was reported, its
       content was checked against where it's actually captured elsewhere (with any
       orphaned finding moved or flagged), and the file was removed unless the user
-      chose to keep it.
+      chose to keep it or it is a tracked programme guide that continues.
